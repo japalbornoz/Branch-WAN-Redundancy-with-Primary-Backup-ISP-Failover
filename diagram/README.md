@@ -1,8 +1,7 @@
 ```mermaid
 
 flowchart TB
-    %% CCNA Project 05 – Branch WAN Redundancy
-    
+    %% CCNA Project 05 – Option A: Branch WAN Redundancy
 
     EXT["EXT-SRV<br/>8.8.8.8/24<br/>GW 8.8.8.1"]
     INET["INET<br/>G0/0 100.64.1.2/30<br/>G0/1 100.64.2.2/30<br/>G0/2 8.8.8.1/24"]
@@ -12,7 +11,6 @@ flowchart TB
 
     R1["R1 Branch Edge Router<br/>S0/0/0 203.0.113.2/30<br/>S0/0/1 198.51.100.2/30<br/>G0/0 192.168.10.1/24<br/>G0/1 192.168.20.1/24"]
 
-    SW1["SW1 Access Switch"]
     PC1["PC1 Users<br/>192.168.10.10/24<br/>GW 192.168.10.1"]
     SRV1["SRV1 Servers<br/>192.168.20.10/24<br/>GW 192.168.20.1"]
 
@@ -23,6 +21,5 @@ flowchart TB
     ISP1 ---|203.0.113.0/30| R1
     ISP2 ---|198.51.100.0/30| R1
 
-    R1 --- SW1
-    SW1 ---|192.168.10.0/24| PC1
-    SW1 ---|192.168.20.0/24| SRV1
+    R1 ---|192.168.10.0/24| PC1
+    R1 ---|192.168.20.0/24| SRV1
