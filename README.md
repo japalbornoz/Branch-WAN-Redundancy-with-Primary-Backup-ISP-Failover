@@ -9,13 +9,14 @@ The goal of this project was to understand the operational behavior of WAN failo
 - Build a branch WAN topology with **dual ISP connectivity**
 - Configure **primary and backup default routes**
 - Validate **baseline connectivity**
-- Simulate **primary WAN failure** and confirm failover to backup ISP
-- Simulate **primary WAN restoration** and confirm failback
-- Simulate **backup WAN failure while primary is healthy**
+- Simulate **primary WAN failure** and confirm failover to ISP2
+- Simulate **primary WAN restoration** and confirm failback to ISP1
+- Simulate **backup WAN failure while primary remains healthy**
 - Document routing behavior, testing results, and troubleshooting findings
 
 ## Topology Summary
-<project05-network-topology screenshot here>
+
+![Project 05 Topology](topology/project05-topology.png)
 
 The topology consists of:
 - **R1** as the branch edge router
@@ -26,16 +27,16 @@ The topology consists of:
 - **PC1** and **SRV1** as internal branch endpoints
 
 ### Logical Flow
-```mermaid
 
+```mermaid
 flowchart TB
-    %% CCNA Project 05 – Option A: Branch WAN Redundancy
+    %% CCNA Project 05 – Branch WAN Redundancy
 
     EXT["EXT-SRV<br/>8.8.8.8/24<br/>GW 8.8.8.1"]
     INET["INET<br/>G0/0 100.64.1.2/30<br/>G0/1 100.64.2.2/30<br/>G0/2 8.8.8.1/24"]
 
     ISP1["ISP1 (Primary)<br/>S0/0/0 203.0.113.1/30<br/>G0/0 100.64.1.1/30"]
-    ISP2["ISP2 (Backup)<br/>S0/0/0 198.51.100.1/30<br/>G0/0 100.64.2.1/30"]
+    ISP2["ISP2 (Backup)<br/>S0/0/1 198.51.100.1/30<br/>G0/1 100.64.2.1/30"]
 
     R1["R1 Branch Edge Router<br/>S0/0/0 203.0.113.2/30<br/>S0/0/1 198.51.100.2/30<br/>G0/0 192.168.10.1/24<br/>G0/1 192.168.20.1/24"]
 
@@ -52,37 +53,37 @@ flowchart TB
     R1 ---|192.168.10.0/24| PC1
     R1 ---|192.168.20.0/24| SRV1
 ```
-- Normal path: `Branch -> R1 -> ISP1 -> INET -> EXT-SRV`
-- Failover path: `Branch -> R1 -> ISP2 -> INET -> EXT-SRV`
+Under normal conditions, branch traffic follows:
+- `Branch -> R1 -> ISP1 -> INET -> EXT-SRV`
 
-## Topology Diagram
-See: `topology/project05-topology.png`
+During primary WAN failure, traffic follows:         
+- `Branch -> R1 -> ISP2 -> INET -> EXT-SRV`
 
 ## IP Addressing Plan
+| Device  | Interface     |    IP Address |     Subnet Mask | Purpose                   |
+| ------- | ------------- | ------------: | --------------: | ------------------------- |
+| R1      | G0/0          |  192.168.10.1 |   255.255.255.0 | PC1 LAN gateway           |
+| R1      | G0/1          |  192.168.20.1 |   255.255.255.0 | SRV1 LAN gateway          |
+| R1      | S0/0/0        |   203.0.113.2 | 255.255.255.252 | Primary WAN to ISP1       |
+| R1      | S0/0/1        |  198.51.100.2 | 255.255.255.252 | Backup WAN to ISP2        |
+| ISP1    | S0/0/0        |   203.0.113.1 | 255.255.255.252 | To R1                     |
+| ISP1    | G0/0          |    100.64.1.1 | 255.255.255.252 | To INET                   |
+| ISP2    | S0/0/1        |  198.51.100.1 | 255.255.255.252 | To R1                     |
+| ISP2    | G0/1          |    100.64.2.1 | 255.255.255.252 | To INET                   |
+| INET    | G0/0          |    100.64.1.2 | 255.255.255.252 | To ISP1                   |
+| INET    | G0/1          |    100.64.2.2 | 255.255.255.252 | To ISP2                   |
+| INET    | G0/2          |       8.8.8.1 |   255.255.255.0 | External network gateway  |
+| PC1     | FastEthernet0 | 192.168.10.10 |   255.255.255.0 | User endpoint             |
+| SRV1    | FastEthernet0 | 192.168.20.10 |   255.255.255.0 | Internal server endpoint  |
+| EXT-SRV | FastEthernet0 |       8.8.8.8 |   255.255.255.0 | External reachable server |
 
-| Device | Interface | IP Address | Subnet Mask | Purpose |
-|---|---|---:|---:|---|
-| R1 | G0/0 | 192.168.10.1 | 255.255.255.0 | PC1 LAN gateway |
-| R1 | G0/1 | 192.168.20.1 | 255.255.255.0 | SRV1 LAN gateway |
-| R1 | S0/0/0 | 203.0.113.2 | 255.255.255.252 | Primary WAN to ISP1 |
-| R1 | S0/0/1 | 198.51.100.2 | 255.255.255.252 | Backup WAN to ISP2 |
-| ISP1 | S0/0/0 | 203.0.113.1 | 255.255.255.252 | To R1 |
-| ISP1 | G0/0 | 100.64.1.1 | 255.255.255.252 | To INET |
-| ISP2 | S0/0/1 | 198.51.100.1 | 255.255.255.252 | To R1 |
-| ISP2 | G0/1 | 100.64.2.1 | 255.255.255.252 | To INET |
-| INET | G0/0 | 100.64.1.2 | 255.255.255.252 | To ISP1 |
-| INET | G0/1 | 100.64.2.2 | 255.255.255.252 | To ISP2 |
-| INET | G0/2 | 8.8.8.1 | 255.255.255.0 | External network gateway |
-| PC1 | FastEthernet0 | 192.168.10.10 | 255.255.255.0 | User endpoint |
-| SRV1 | FastEthernet0 | 192.168.20.10 | 255.255.255.0 | Internal server endpoint |
-| EXT-SRV | FastEthernet0 | 8.8.8.8 | 255.255.255.0 | External reachable server |
 
 ## Routing Design
 
 ## R1 Default Route Logic
 R1 uses:
-- **Primary static default route** via ISP1
-- **Floating static backup default route** via ISP2 with higher administrative distance
+- a **primary static default route** via ISP1
+- a **floating static backup default route** via ISP2 with a higher administrative distance
 
 ### Example
 - Primary route: `ip route 0.0.0.0 0.0.0.0 203.0.113.1`
@@ -95,7 +96,7 @@ Static routes were also configured on ISP1, ISP2, and INET so that return traffi
 - branch LAN networks
 - branch WAN /30 networks
 
-This was important for successful validation of both:
+This was required to validate both:
 - host-originated traffic
 - router-originated traffic
 
