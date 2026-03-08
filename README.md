@@ -107,7 +107,12 @@ The following validation scenarios were performed:
 3. **Primary WAN restoration test** to validate failback to ISP1
 4. **Backup WAN failure test** while primary remains healthy
 
-Detailed results are documented in the `validation/` folder.
+Detailed validation results are documented in the [validation/](validation/) folder:
+
+- [Baseline Validation](validation/baseline-validation.md)
+- [Failover Test 1 – Primary Link Down](validation/failover-test-1-primary-link-down.md)
+- [Failover Test 2 – Primary Link Restored](validation/failover-test-2-primary-link-restored.md)
+- [Failover Test 3 – Backup Link Down](validation/failover-test-3-backup-link-down.md)
 
 ## Key Commands Used
 - `show ip interface brief`
