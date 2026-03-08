@@ -1,5 +1,8 @@
+```mermaid
+
 flowchart TB
     %% CCNA Project 05 – Branch WAN Redundancy
+    
 
     EXT["EXT-SRV<br/>8.8.8.8/24<br/>GW 8.8.8.1"]
     INET["INET<br/>G0/0 100.64.1.2/30<br/>G0/1 100.64.2.2/30<br/>G0/2 8.8.8.1/24"]
