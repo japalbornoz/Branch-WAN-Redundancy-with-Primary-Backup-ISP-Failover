@@ -96,11 +96,11 @@ Expected:
 Baseline validation was successful. R1 preferred ISP1 as the active default route, internal endpoints reached the external server successfully, and router-originated reachability to upstream transit networks and the external destination was confirmed.
 
 
-### Evidence to Capture
-- `show ip interface brief` on R1
-- `show ip route` on R1
-- successful `ping 8.8.8.8` from R1
-- successful `traceroute 8.8.8.8` from R1
-- successful `ping 8.8.8.8` from PC1
-- successful `ping 8.8.8.8` from SRV1
+## Evidence
+- [R1 show ip interface brief](screenshots/baseline-r1-show-ip-interface-brief.png)
+- [R1 show ip route](screenshots/baseline-r1-show-ip-route.png)
+- [R1 ping 8.8.8.8](screenshots/baseline-r1-ping-8.8.8.8.png)
+- [R1 traceroute 8.8.8.8](screenshots/baseline-r1-traceroute-8.8.8.8.png)
+- [PC1 ping 8.8.8.8](screenshots/baseline-pc1-ping-8.8.8.8.png)
+- [SRV1 ping 8.8.8.8](screenshots/baseline-srv1-ping-8.8.8.8.png)
 
