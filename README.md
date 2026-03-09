@@ -56,7 +56,7 @@ flowchart TB
 Under normal conditions, branch traffic follows:
 - `Branch -> R1 -> ISP1 -> INET -> EXT-SRV`
 
-During primary WAN failure, traffic follows:         
+During primary WAN failure, traffic follows:
 - `Branch -> R1 -> ISP2 -> INET -> EXT-SRV`
 
 ## IP Addressing Plan
@@ -80,18 +80,18 @@ During primary WAN failure, traffic follows:
 
 ## Routing Design
 
-## R1 Default Route Logic
+### R1 Default Route Logic
 R1 uses:
 - a **primary static default route** via ISP1
 - a **floating static backup default route** via ISP2 with a higher administrative distance
 
-### Example
+Example:
 - Primary route: `ip route 0.0.0.0 0.0.0.0 203.0.113.1`
 - Backup route: `ip route 0.0.0.0 0.0.0.0 198.51.100.1 10`
 
 This causes R1 to prefer ISP1 while it is available. If the primary path is lost, the backup route becomes active.
 
-## Upstream Return Routing
+### Upstream Return Routing
 Static routes were also configured on ISP1, ISP2, and INET so that return traffic could reach:
 - branch LAN networks
 - branch WAN /30 networks
