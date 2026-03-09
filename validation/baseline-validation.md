@@ -28,10 +28,10 @@ Run:
 show ip interface brief
 ```
 Expected:
-`GigabitEthernet0/0` is up/up
-`GigabitEthernet0/1` is up/up
-`Serial0/0/0` is up/up
-`Serial0/0/1` is up/u
+- `GigabitEthernet0/0` is up/up
+- `GigabitEthernet0/1` is up/up
+- `Serial0/0/0` is up/up
+- `Serial0/0/1` is up/up
 
 ### 2. Verify R1 routing table  
 Run:
