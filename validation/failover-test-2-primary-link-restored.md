@@ -23,7 +23,7 @@ This restores the primary WAN circuit.
 - outbound traffic returns to the primary WAN path
 
 ## Validation Steps
-### 1. Verify interface state from R1
+### 1. Verify interface state
 Run:
 ```cisco
 show ip interface brief
@@ -35,7 +35,7 @@ This confirms that the primary WAN link is operational again.
 
 
 
-### 2. Verify routing table change from R1 
+### 2. Verify routing table change
 Run:
 ```cisco
 show ip route
