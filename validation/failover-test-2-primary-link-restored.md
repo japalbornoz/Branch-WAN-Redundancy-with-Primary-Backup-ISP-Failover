@@ -25,7 +25,7 @@ Expected Behavior
 ## Validation Steps
 ### 1. Verify interface state
 Run:
-```
+```cisco
 show ip interface brief
 ```
 Expected:
@@ -34,17 +34,17 @@ Expected:
 
 ### 2. Verify routing table change
 Run:
-```
+```cisco
 show ip route
 ```
 Expected active default route:
-```
+```cisco
 S* 0.0.0.0/0 [1/0] via 203.0.113.1
 ```
 
 ### 3. Verify external reachability from R1
 Run:
-```
+```cisco
 ping 8.8.8.8
 traceroute 8.8.8.8
 ```
@@ -54,7 +54,7 @@ Expected:
 
 ### 4. Verify end-host connectivity from PC1
 Run:
-```
+```text
 ping 8.8.8.8
 ```
 Expected:
@@ -62,7 +62,7 @@ Expected:
 
 ### 5. Verify end-host connectivity from SRV1
 Run:
-```
+```text
 ping 8.8.8.8
 ```
 Expected:
