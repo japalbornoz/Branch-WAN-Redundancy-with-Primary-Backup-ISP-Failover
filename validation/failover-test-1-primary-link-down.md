@@ -57,10 +57,11 @@ traceroute 8.8.8.8
 ```
 Expected:
 - ping succeeds
-- traceroute follows ISP2 instead of ISP1
+- traceroute shows the path through ISP2 instead of ISP1
 
 ### 4. Verify end-host connectivity from PC1
-```From PC1 command prompt:
+From PC1 command prompt:
+```text
 ping 8.8.8.8
 ```
 Expected:
@@ -69,7 +70,8 @@ Expected:
 
 
 ### 5. Verify end-host connectivity from SRV1
-```From SRV1 command prompt:
+From SRV1 command prompt:
+```text
 ping 8.8.8.8
 ```
 Expected:
