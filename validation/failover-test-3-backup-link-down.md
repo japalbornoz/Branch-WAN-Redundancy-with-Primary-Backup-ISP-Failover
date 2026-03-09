@@ -76,6 +76,6 @@ The backup WAN link was successfully taken out of service while the primary WAN 
 ## Evidence
 - [failover3-r1-show-ip-interface-brief.png](screenshots/failover3-r1-show-ip-interface-brief.png)
 - [failover3-r1-show-ip-route.png](screenshots/failover3-r1-show-ip-route.png)
-- [failover3-r1-ping-8.8.8.8.png](screenshots/failover3-r1-ping-and-traceroute-8.8.8.8.png)
+- [failover3-r1-ping-and-traceroute-8.8.8.8.png](screenshots/failover3-r1-ping-and-traceroute-8.8.8.8.png)
 - [failover3-pc1-ping-8.8.8.8.png](screenshots/failover3-pc1-ping-8.8.8.8.png)
 - [failover3-srv1-ping-8.8.8.8.png](screenshots/failover3-srv1-ping-8.8.8.8.png)
