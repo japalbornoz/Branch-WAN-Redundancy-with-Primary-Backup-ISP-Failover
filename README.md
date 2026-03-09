@@ -5,6 +5,23 @@ This project simulates a small branch office with dual WAN connectivity in Cisco
 
 The goal of this project was to understand the operational behavior of WAN failover, validate route preference changes, and document failure testing in a way that reflects entry-level NOC troubleshooting and monitoring work.
 
+## Project Structure
+
+This repository is organized to separate design, configuration, validation, and troubleshooting documentation.
+
+| Section | Description |
+|--------|-------------|
+| [Topology](topology/) | Network diagram and addressing plan |
+| [Configs](configs/) | Device configurations used in the lab |
+| [Validation](validation/) | Baseline tests and WAN failover validation |
+| [Troubleshooting](troubleshooting/) | Issues encountered and lessons learned |
+
+### Validation Tests
+- [Baseline Validation](validation/baseline-validation.md)
+- [Failover Test 1 – Primary Link Down](validation/failover-test-1-primary-link-down.md)
+- [Failover Test 2 – Primary Link Restored](validation/failover-test-2-primary-link-restored.md)
+- [Failover Test 3 – Backup Link Down](validation/failover-test-3-backup-link-down.md)
+
 ## Objectives
 - Build a branch WAN topology with **dual ISP connectivity**
 - Configure **primary and backup default routes**
@@ -144,3 +161,6 @@ That would allow failover decisions based on upstream reachability instead of on
 - Routing table interpretation
 - Return-path troubleshooting
 - Lab documentation and structured validation
+
+## Project Outcome
+This project successfully demonstrated WAN failover using floating static routes in a simulated branch environment. Through structured validation and troubleshooting, the lab highlighted important operational concepts such as return-path routing, asymmetric routing behavior, and the limitations of static routing during upstream failures.  
