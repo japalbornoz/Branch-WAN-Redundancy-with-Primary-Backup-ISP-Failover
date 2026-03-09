@@ -13,17 +13,17 @@ Because the R1–ISP1 serial link was down, the return packets were dropped.
 
 ### Cause
 The INET router still preferred ISP1 for the branch LAN return routes:
-```text
+```cisco
 ip route 192.168.10.0 255.255.255.0 100.64.1.1
 ip route 192.168.20.0 255.255.255.0 100.64.1.1
 ```
-INET was unaware that the R1–ISP1 link had failed because its own interface toward ISP1 remained operational. This caused **asymmetric routing**, where the forward and return paths used different ISPs.
+INET remained unaware of the downstream failure because its own interface toward ISP1 stayed operational. This caused **asymmetric routing**, where the forward and return paths used different ISPs.
 
 ### Fix
 Adjusted static routes on INET so that return traffic preference aligned with the intended WAN design.
 
 Final configuration:
-```text
+```cisco
 ip route 192.168.10.0 255.255.255.0 100.64.1.1
 ip route 192.168.20.0 255.255.255.0 100.64.1.1
 ip route 192.168.10.0 255.255.255.0 100.64.2.1 10
@@ -48,7 +48,7 @@ Without these routes, return packets to R1's WAN interfaces could not be forward
 
 ### Fix
 Added static routes on INET for the WAN transit subnets:
-```text
+```cisco
 ip route 203.0.113.0 255.255.255.252 100.64.1.1
 ip route 198.51.100.0 255.255.255.252 100.64.2.1
 ```
@@ -65,7 +65,9 @@ Clocking must be provided by the **DCE side of a serial connection**.
 
 ### Fix
 Configured the ISP routers as the DCE side and applied clocking:
+```cisco
 clock rate 64000
+```
 
 This allowed the serial links to establish properly.
 
