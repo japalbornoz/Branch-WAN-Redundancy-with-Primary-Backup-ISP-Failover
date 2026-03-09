@@ -82,7 +82,7 @@ The primary WAN failure scenario was successfully simulated. R1 removed the prim
 ## Evidence
 - [R1 interface state after shutdown](screenshots/failover1-r1-show-ip-interface-brief.png)
 - [R1 routing table showing backup default route](screenshots/failover1-r1-show-ip-route.png)
-- [R1 ping 8.8.8.8](screenshots/failover1-r1-ping-8.8.8.8.png)
+- [R1 ping 8.8.8.8 via ISP2](screenshots/failover1-r1-ping-8.8.8.8.png)
 - [R1 traceroute via ISP2](screenshots/failover1-r1-traceroute-8.8.8.8.png)
 - [PC1 ping during failover](screenshots/failover1-pc1-ping-8.8.8.8.png)
 - [SRV1 ping during failover](screenshots/failover1-srv1-ping-8.8.8.8.png)
