@@ -1,37 +1,90 @@
 # Issues Encountered
 
-## 1. Router-originated ping failed while host traffic worked
+## 1. Return-path routing problem during WAN failover
+
 ### Symptom
-PC1 could reach the external server, but R1 could not consistently ping `8.8.8.8` or some upstream transit interfaces.
+During the primary WAN failure test, R1 successfully failed over to ISP2 and could reach the external server. However, **PC1 and SRV1 could not complete ping or traceroute to 8.8.8.8**.
+
+Using Packet Tracer simulation mode showed that:
+- outbound traffic from the branch correctly followed the **ISP2 path**
+- return traffic from the INET router was still forwarded toward **ISP1**
+
+Because the R1–ISP1 serial link was down, the return packets were dropped.
 
 ### Cause
-INET did not initially have return routes for the branch WAN /30 networks:
+The INET router still preferred ISP1 for the branch LAN return routes:
+```text
+ip route 192.168.10.0 255.255.255.0 100.64.1.1
+ip route 192.168.20.0 255.255.255.0 100.64.1.1
+```
+INET was unaware that the R1–ISP1 link had failed because its own interface toward ISP1 remained operational. This caused **asymmetric routing**, where the forward and return paths used different ISPs.
+
+### Fix
+Adjusted static routes on INET so that return traffic preference aligned with the intended WAN design.
+
+Final configuration:
+```text
+ip route 192.168.10.0 255.255.255.0 100.64.1.1
+ip route 192.168.20.0 255.255.255.0 100.64.1.1
+ip route 192.168.10.0 255.255.255.0 100.64.2.1 10
+ip route 192.168.20.0 255.255.255.0 100.64.2.1 10
+```
+This ensured that return traffic followed the **primary ISP1 path under normal conditions**, while ISP2 remained available as a standby path.
+
+---
+
+## 2. Missing return routes for branch WAN subnets
+
+### Symptom
+R1 initially failed to ping some upstream transit interfaces and the external server even though PC1 could reach the destination.
+
+### Cause
+The INET router did not initially have routes for the branch WAN /30 networks:
+
 - `203.0.113.0/30`
 - `198.51.100.0/30`
 
+Without these routes, return packets to R1's WAN interfaces could not be forwarded correctly.
+
 ### Fix
-Added static routes on INET for the branch WAN transit subnets.
+Added static routes on INET for the WAN transit subnets:
+```text
+ip route 203.0.113.0 255.255.255.252 100.64.1.1
+ip route 198.51.100.0 255.255.255.252 100.64.2.1
+```
 
 ---
 
-## 2. DCE / DTE serial consideration
+## 3. Serial interface clocking (DCE/DTE)
+
 ### Symptom
-Serial links required clocking to come up properly.
+Serial WAN links initially failed to come up during topology deployment.
 
 ### Cause
-Clock rate must be configured only on the DCE side.
+Clocking must be provided by the **DCE side of a serial connection**.
 
 ### Fix
-Configured ISP serial interfaces as DCE and applied `clock rate 64000` on those interfaces.
+Configured the ISP routers as the DCE side and applied clocking:
+clock rate 64000
+
+This allowed the serial links to establish properly.
 
 ---
 
-## 3. Transit ping behavior changed during failover
+## 4. Router-originated traffic behavior during failover
+
 ### Symptom
-Some upstream IP ping tests behaved differently depending on which ISP path was currently active.
+Ping results from R1 differed depending on which WAN path was active.
 
 ### Cause
-R1 used the active default route unless a more specific route existed. Router-originated traffic followed the currently preferred path.
+Router-originated traffic follows the **currently active routing table entry**, typically the default route unless a more specific route exists.
+
+During failover, R1 switched its default route to ISP2, which changed the path used by router-generated traffic.
 
 ### Fix
-Validated path behavior using routing table checks and failover-aware testing rather than relying only on single-interface ping assumptions.
+Validation focused on:
+- verifying the active default route
+- checking traceroute paths
+- confirming end-to-end host connectivity
+
+rather than relying solely on individual interface ping tests.
